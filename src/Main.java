@@ -1,10 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 public class Main {
@@ -20,69 +17,113 @@ public class Main {
     static String selectedCoursesDocPATH;
     static String selectedSavePath;
 
+    public static _label comCoursesPath = new _label("Common Courses file: " + selectedCommonCoursesDocPATH);
+    public static _label coursesPath = new _label("Courses file: " + selectedCoursesDocPATH);
+    public static _label instructorsPath = new _label("Instructors file: " + selectedInstructorsDocPATH);
+    public static _label classroomsPath = new _label("Classrooms file: " + selectedClassroomsDocPATH);
+
+    public static _label savePath = new _label("Save file: " + selectedSavePath);
+
     public static void main(String[] args) {
         _frame frame = new _frame();
+        frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
 
-        // inputPanel: Butonların yer alacağı panel
-        JPanel inputPanel = new JPanel();
-        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS)); // Butonları alt alta sıralar
-        inputPanel.setBounds(40, 60, 600, 600);
-        inputPanel.setBackground(new Color(0x1b1815));
+        JPanel titlePanel = new JPanel();
+        JPanel selectPanel = new JPanel();
+        JPanel infoPanel = new JPanel();
+        JPanel savePanel = new JPanel();
 
-        // Panelin hem border çizgisi hem de padding (boşluk) ekleniyor
-        Border lineBorder = BorderFactory.createLineBorder(new Color(0xf5f2ea));
-        Border emptyBorder = BorderFactory.createEmptyBorder(10, 20, 10, 20);
-        inputPanel.setBorder(BorderFactory.createCompoundBorder(lineBorder, emptyBorder));
+        frame.add(titlePanel);
+        frame.add(selectPanel);
+        frame.add(infoPanel);
+        frame.add(savePanel);
 
-        // outputPanel: Diğer panel
-        JPanel outputPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        outputPanel.setBounds(660, 60, 580, 600);
-        outputPanel.setBorder(BorderFactory.createLineBorder(new Color(0xf5f2ea)));
-        outputPanel.setBackground(new Color(0x1b1815));
+        titlePanel.setBackground(new Color(0x1b1815));
+        selectPanel.setBackground(new Color(0x1b1815));
+        infoPanel.setBackground(new Color(0x1b1815));
+        savePanel.setBackground(new Color(0x1b1815));
 
-        // inputPanel'a butonları ekliyoruz
-        frame.add(inputPanel);
-        frame.add(outputPanel);
+        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
 
-        // Butonları oluşturuyoruz
-        inputPanel.add(Box.createVerticalStrut(20)); // Panelin üst kısmına boşluk ekliyoruz
+        ImageIcon logoIcon = new ImageIcon("src/images/BeePlan logo without logo.png");
+        JLabel logoLabel = new JLabel(new ImageIcon(logoIcon.getImage().getScaledInstance(100, -1, Image.SCALE_SMOOTH)));
+        logoLabel.setOpaque(true);
+        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        _label head1 = new _label("Welcome to BeePlan");
+        head1.setFont(new Font("IM Fell English SC", Font.PLAIN, 24));
+        head1.setAlignmentX(Component.CENTER_ALIGNMENT);
+        _label head2 = new _label("Warning: For the program to work correctly and accurately, please ensure that all selected and saved files are in .txt format.");
+        head2.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        titlePanel.add(Box.createVerticalStrut(35));
+        titlePanel.add(logoLabel);
+        titlePanel.add(Box.createVerticalStrut(10));
+        titlePanel.add(head1);
+        titlePanel.add(Box.createVerticalStrut(5));
+        titlePanel.add(head2);
+
+        selectPanel.setLayout(new BoxLayout(selectPanel, BoxLayout.Y_AXIS));
+
+        selectPanel.add(Box.createVerticalStrut(10));
         _button selectCommonCoursesDocButton = new _button("selectCommonCoursesDocButton","Select Common Courses Document", 1);
-        selectCommonCoursesDocButton.setAlignmentX(Component.RIGHT_ALIGNMENT); // Sağ hizalama
-        selectCommonCoursesDocButton.setPreferredSize(new Dimension(300, 40)); // Boyutu belirleyelim
-        inputPanel.add(selectCommonCoursesDocButton);
+        selectCommonCoursesDocButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        selectPanel.add(selectCommonCoursesDocButton);
         selectedCommonCoursesDocPATH = selectCommonCoursesDocButton.selectedFilePath;
 
-        // Butonlar arasına boşluk ekliyoruz
-        inputPanel.add(Box.createVerticalStrut(10)); // Butonlar arasına boşluk ekliyoruz
-
-        _button selectInstructorsDocButton = new _button("selectInstructorsDocButton","Select Instructors Document", 1);
-        selectInstructorsDocButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        selectInstructorsDocButton.setPreferredSize(new Dimension(300, 40)); // Boyutu belirleyelim
-        inputPanel.add(selectInstructorsDocButton);
-        selectedInstructorsDocPATH = selectInstructorsDocButton.selectedFilePath;
-
-        inputPanel.add(Box.createVerticalStrut(10)); // Butonlar arasına boşluk ekliyoruz
-
-        _button selectClassroomsDocButton = new _button("selectClassroomsDocButton","Select Classroom Document", 1);
-        selectClassroomsDocButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        selectClassroomsDocButton.setPreferredSize(new Dimension(300, 40)); // Boyutu belirleyelim
-        inputPanel.add(selectClassroomsDocButton);
-        selectedClassroomsDocPATH = selectClassroomsDocButton.selectedFilePath;
-
-        inputPanel.add(Box.createVerticalStrut(10)); // Butonlar arasına boşluk ekliyoruz
+        selectPanel.add(Box.createVerticalStrut(10));
 
         _button selectCoursesDocButton = new _button("selectCoursesDocButton","Select Course Document", 1);
-        selectCoursesDocButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        selectCoursesDocButton.setPreferredSize(new Dimension(300, 40)); // Boyutu belirleyelim
-        inputPanel.add(selectCoursesDocButton);
+        selectCoursesDocButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        selectPanel.add(selectCoursesDocButton);
         selectedCoursesDocPATH = selectCoursesDocButton.selectedFilePath;
 
-        // Diğer buton
+        selectPanel.add(Box.createVerticalStrut(10));
+
+        _button selectInstructorsDocButton = new _button("selectInstructorsDocButton","Select Instructors Document", 1);
+        selectInstructorsDocButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        selectPanel.add(selectInstructorsDocButton);
+        selectedInstructorsDocPATH = selectInstructorsDocButton.selectedFilePath;
+
+        selectPanel.add(Box.createVerticalStrut(10));
+
+        _button selectClassroomsDocButton = new _button("selectClassroomsDocButton","Select Classroom Document", 1);
+        selectClassroomsDocButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        selectPanel.add(selectClassroomsDocButton);
+        selectedClassroomsDocPATH = selectClassroomsDocButton.selectedFilePath;
+
+        selectPanel.add(Box.createVerticalStrut(10));
+
+        selectPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        infoPanel.add(comCoursesPath);
+        comCoursesPath.setAlignmentX(Component.LEFT_ALIGNMENT);
+        infoPanel.add(coursesPath);
+        coursesPath.setAlignmentX(Component.LEFT_ALIGNMENT);
+        infoPanel.add(instructorsPath);
+        instructorsPath.setAlignmentX(Component.LEFT_ALIGNMENT);
+        infoPanel.add(classroomsPath);
+        classroomsPath.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         _button generateCourseScedule = new _button("generateCourseScedule","Generate Course Scedule", 0);
-        outputPanel.add(generateCourseScedule);
+
+        savePanel.setLayout(new BoxLayout(savePanel, BoxLayout.Y_AXIS));
+        savePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        generateCourseScedule.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        savePanel.add(Box.createVerticalStrut(10));
+        savePanel.add(generateCourseScedule);
         selectedSavePath = generateCourseScedule.selectedFilePath;
 
-        // Görüntüle
+        savePanel.add(Box.createVerticalStrut(10));
+        savePanel.add(savePath);
+        savePath.setAlignmentX(Component.CENTER_ALIGNMENT);
+        savePanel.add(Box.createVerticalStrut(35));
+
         frame.setVisible(true);
     }
 
@@ -109,7 +150,6 @@ public class Main {
         readCommonCourses(selectedCommonCoursesDocPATH);
 
         try {
-            // Dosyayı temizleme
             try (FileWriter cleaner = new FileWriter(selectedSavePath, false)) {
                 cleaner.close();
             } catch (IOException e) {
@@ -124,17 +164,14 @@ public class Main {
                     continue;
                 }
 
-                // Teorik dersler
                 if (c.theoricalHours > 0) {
                     if (!scheduleCourse(detailsWriter, c, "theorical", c.theoricalHours)) {
                         System.err.println("Failed to schedule theorical slots for: " + c.courseCode);
                     }
                 }
 
-                // Pratik dersler
                 if (c.practicalHours > 0) {
                     if (c.studentEstimated > 40) {
-                        // 40 kişiden fazla, gruplara ayır
                         int numGroups = (int) Math.ceil((double) c.studentEstimated / 40);
                         for (int i = 1; i <= numGroups; i++) {
                             if (!scheduleCourse(detailsWriter, c, "practical (" + i + ")", c.practicalHours)) {
@@ -142,7 +179,6 @@ public class Main {
                             }
                         }
                     } else {
-                        // 40 veya daha az öğrenci
                         if (!scheduleCourse(detailsWriter, c, "practical", c.practicalHours)) {
                             System.err.println("Failed to schedule practical slots for: " + c.courseCode);
                         }
@@ -157,20 +193,23 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        // Eğitmenlerin günlük teorik ders saatlerini yazdırma
-        for (Instructor i : instructorsList) {
-            System.out.println(i.name + " - Günlük Teorik Dersler:");
-            for (int a = 0; a <= 4; a++) {
-                System.out.print(i.dailyTheoricalLectures[a] + "\t");
+        try {
+            File resultFile = new File(selectedSavePath);
+            if (resultFile.exists()) {
+                Desktop desktop = Desktop.getDesktop();
+                desktop.open(resultFile);
+            }else {
+                System.out.println("File not found!");
             }
-            System.out.println();
+        }catch (IOException e) {
+            System.out.println("Error: There is an error at opening the file" + e.getMessage());
         }
     }
 
     public static boolean scheduleCourse(FileWriter detailsWriter, Course c, String type, int hours) throws IOException {
         for (int day = 1; day <= 5; day++) {
             for (int session = 1; session <= (8 - hours + 1); session++) {
-                for (Classroom classroom : classroomList) { // Tüm sınıfları dene
+                for (Classroom classroom : classroomList) {
                     String dayStr = Integer.toString(day);
                     if (checkConsecutiveSlots(c.instructor, classroom, dayStr, session, hours)) {
                         reserveConsecutiveSlots(c.instructor, classroom, dayStr, session, hours);
@@ -192,7 +231,6 @@ public class Main {
     public static boolean checkConsecutiveSlots(Instructor instructor, Classroom classroom, String day, int startSession, int requiredSlots) {
         int dayIndex = Integer.parseInt(day) - 1;
 
-        // Günlük teorik ders sınırı kontrolü
         if (instructor.dailyTheoricalLectures[dayIndex] + requiredSlots > 4) {
             return false;
         }
@@ -221,7 +259,6 @@ public class Main {
     }
 
     public static void readInstructors(String documentDirectory) {
-        //String documentDirectory = "C:\\Users\\devba\\IdeaProjects\\BeePlan\\InstructorsDocument.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(documentDirectory))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -234,7 +271,6 @@ public class Main {
     }
 
     public static void readCourses(String documentDirectory) {
-        //String documentDirectory = "C:\\Users\\devba\\IdeaProjects\\BeePlan\\CourcesDocument.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(documentDirectory))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -248,7 +284,6 @@ public class Main {
     }
 
     public static void readClassrooms(String documentDirectory) {
-        //String documentDirectory = "C:\\Users\\devba\\IdeaProjects\\BeePlan\\ClassroomsDocument.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(documentDirectory))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -261,7 +296,6 @@ public class Main {
     }
 
     public static void readCommonCourses(String documentDirectory) {
-        //String documentDirectory = "C:\\Users\\devba\\IdeaProjects\\BeePlan\\commonCourses.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(documentDirectory))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -284,5 +318,4 @@ public class Main {
         }
         return null;
     }
-
 }

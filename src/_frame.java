@@ -9,14 +9,12 @@ public class _frame extends JFrame {
     _frame() {
         this.setVisible(true);
         this.setTitle("BeePlan - The Course Schedule Automation");
-        this.setSize(1280,720);
+        this.setSize(1060,596);
         this.setLayout(null);
-        //this.setResizable(false);
 
         this.setIconImage(beePlanLogoWithoutText.getImage());
         this.getContentPane().setBackground(new Color(0x1b1815));
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //this.pack();
     }
 }
